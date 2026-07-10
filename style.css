@@ -898,8 +898,8 @@ audio {
 }
 
 #guest-list {
-  width: 100%;
-  margin: 18px 0 0;
+  width: auto;
+  margin: 18px 24px;
   display: grid;
   gap: 12px;
 }
@@ -1864,4 +1864,26 @@ body.night-mode .menu-list li:hover {
   .guestbook-section {
     width: 100%;
   }
+}
+.guestbook-section {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.guestbook-form {
+  width: 100%;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+#guest-list {
+  width: auto;
+  margin-left: 18px;
+  margin-right: 18px;
+}
+
+.guest-card {
+  width: 100%;
 }
