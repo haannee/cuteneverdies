@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", function () {
     { title: "길에서", file: "music/길에서.mp3" },
     { title: "눈물도아까워", file: "music/눈물도아까워.mp3" },
     { title: "잘가요내사랑", file: "music/잘가요내사랑.mp3" },
-    { title: "한번더OK?", file: "music/한번더OK?.mp3" },
+    { title: "한번더OK_", file: "music/한번더OK?.mp3" },
     { title: "비밀번호486", file: "music/비밀번호486.mp3" },
     { title: "Memories", file: "music/Memories.mp3" },
     { title: "사고쳤어요", file: "music/사고쳤어요.mp3" },
@@ -171,7 +171,36 @@ document
       if (!win) return;
 
       win.classList.remove("closed");
+win.classList.remove("minimized");
+document
+  .querySelectorAll(".menu-list li[data-window]")
+  .forEach(function (item) {
+    item.addEventListener("click", function () {
+      const win =
+        document.querySelector("." + item.dataset.window);
+
+      if (!win) return;
+
+      win.classList.remove("closed");
       win.classList.remove("minimized");
+
+      win.classList.remove("opening");
+      void win.offsetWidth;
+      win.classList.add("opening");
+
+      bringToFront(win);
+
+      win.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    });
+  });
+      win.classList.remove("opening");
+
+void win.offsetWidth;
+
+win.classList.add("opening");
 
       bringToFront(win);
 
@@ -575,33 +604,51 @@ if (darkBtn) {
    VISITOR COUNTER
 =========================== */
 
-const counter =
+const visitorCounter =
   document.getElementById("visitor-counter");
 
-if (counter) {
-  let number = 1234;
+if (visitorCounter) {
+  let visitorNumber = 1234;
 
-  function updateCounter() {
+  function updateVisitorCounter(animate) {
     const text =
-      String(number).padStart(6, "0");
+      String(visitorNumber).padStart(6, "0");
 
-    counter.innerHTML = "";
+    visitorCounter.innerHTML = "";
 
     text.split("").forEach(function (digit) {
-      const span =
-        document.createElement("span");
-
+      const span = document.createElement("span");
       span.textContent = digit;
-      counter.appendChild(span);
+
+      visitorCounter.appendChild(span);
+
+      if (animate) {
+        span.animate(
+          [
+            {
+              transform: "translateY(-10px)",
+              opacity: 0.3
+            },
+            {
+              transform: "translateY(0)",
+              opacity: 1
+            }
+          ],
+          {
+            duration: 300,
+            easing: "ease-out"
+          }
+        );
+      }
     });
   }
 
-  updateCounter();
+  updateVisitorCounter(false);
 
-  setTimeout(function () {
-    number++;
-    updateCounter();
-  }, 2000);
+  setInterval(function () {
+    visitorNumber++;
+    updateVisitorCounter(true);
+  }, 8000);
 }
 
 
