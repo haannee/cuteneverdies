@@ -83,11 +83,14 @@ const albumCover = document.getElementById("album-cover");
 =========================== */
 
 function bringToFront(win) {
+<<<<<<< HEAD
   document.querySelectorAll(".window").forEach(function (otherWin) {
     otherWin.classList.remove("active-window");
   });
 
   win.classList.add("active-window");
+=======
+>>>>>>> 1fb0f98a3b9884646d7929481b6de270417b2b31
   win.style.zIndex = ++topZ;
 }
 
@@ -664,6 +667,7 @@ setInterval(function () {
 
 /* 첫 곡과 플레이리스트 화면 준비 */
 loadSong(currentSong);
+<<<<<<< HEAD
 const digitalClock = document.getElementById("digital-clock");
 
 function updateClock() {
@@ -681,4 +685,7 @@ function updateClock() {
 
 updateClock();
 setInterval(updateClock, 1000);
+=======
+
+>>>>>>> 1fb0f98a3b9884646d7929481b6de270417b2b31
 });

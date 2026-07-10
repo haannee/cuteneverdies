@@ -723,6 +723,7 @@ body.night-mode .playlist-item.active {
   to {
     transform: rotate(360deg);
   }
+<<<<<<< HEAD
 }
 /* active window effect */
 .window {
@@ -779,4 +780,6 @@ body.night-mode #digital-clock {
 
 body.night-mode .online-dot {
   color: #8fd16a;
+=======
+>>>>>>> 1fb0f98a3b9884646d7929481b6de270417b2b31
 }
