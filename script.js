@@ -224,6 +224,12 @@ void win.offsetWidth;
 
 win.classList.add("opening");
 
+setTimeout(function(){
+
+win.classList.remove("opening");
+
+},300);
+
       bringToFront(win);
 
       win.scrollIntoView({
@@ -809,7 +815,7 @@ const typingTimer = setInterval(function () {
   if (typingIndex >= selectedMessage.length) {
     clearInterval(typingTimer);
   }
-}, 70);
+}, 180);
 
   const bootTimer = setInterval(function () {
     progress += Math.floor(Math.random() * 13) + 5;

@@ -1049,3 +1049,39 @@ body.night-mode .desktop-icon:hover {
   font-size: 11px;
   opacity: 0.75;
 }
+@keyframes windowPop{
+
+0%{
+
+opacity:0;
+
+transform:
+scale(.82);
+
+}
+
+55%{
+
+opacity:1;
+
+transform:
+scale(1.04);
+
+}
+
+100%{
+
+opacity:1;
+
+transform:
+scale(1);
+
+}
+
+}
+
+.window.opening{
+
+animation:windowPop .28s cubic-bezier(.22,1.45,.45,1);
+
+}
