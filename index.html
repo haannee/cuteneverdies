@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>CUTENEVERDIES</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <header class="top-bar">
+    <div>✧ ·˚ CUTENEVERDIES’s HOME ˚· ✧</div>
+   <div>
+  <button id="dark-btn" class="top-btn">NIGHT OFF</button>
+  <button id="crt-btn" class="top-btn">CRT OFF</button>
+  ♡ BGM ON
+</div>
+  </header>
+
+  <div class="site">
+
+    <aside class="left-column">
+      <section class="window green menu">
+        <div class="title-bar drag-handle">
+          <span>:: MENU ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <ul class="menu-list">
+          <li data-window="welcome">🏠 WELCOME</li>
+          <li data-window="diary">📝 DIARY</li>
+          <li>📖 PUBLICATION</li>
+          <li>🎁 OBJECTS</li>
+          <li>✏️ JOURNAL</li>
+          <li>💬 GUESTBOOK</li>
+          <li data-window="about">🐰 ABOUT</li>
+          <li>🔗 LINKS</li>
+        </ul>
+      </section>
+
+      <section class="window green visitor">
+        <div class="title-bar drag-handle">
+          <span>:: VISITOR ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div class="mini-content">
+          <p>TODAY</p>
+          <div class="counter" id="visitor-counter">
+  <span>0</span>
+  <span>0</span>
+  <span>1</span>
+  <span>2</span>
+  <span>3</span>
+  <span>4</span>
+</div>
+          <p>THANK YOU<br>FOR COMING!</p>
+          <div class="bunny">♡ ᕱ⑅ᕱ ♡</div>
+        </div>
+      </section>
+
+      <section class="window green bgm-player">
+        <div class="title-bar drag-handle">
+          <span>:: BGM PLAYER ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div class="mini-content">
+          <p>now playing ♬</p>
+          <div class="tape">
+  <img id="album-cover" src="images/effects/CD.png" alt="album cover">
+</div>
+<p class="song-title" id="song-title">Lullaby</p>
+
+<audio id="bgm"></audio>
+
+          <div class="bar">
+            <div class="bar-fill"></div>
+          </div>
+
+          <div class="controls">
+    <button id="prev-btn">◀</button>
+    <button id="play-btn">▶</button>
+    <button id="pause-btn">❚❚</button>
+    <button id="next-btn">▶▶</button>
+</div>
+        </div>
+      </section>
+
+      <section class="window pink playlist-window">
+        <div class="title-bar drag-handle">
+          <span>:: PLAYLIST ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div id="playlist-list" class="playlist-list"></div>
+      </section>
+    </aside>
+
+    <main class="main-column">
+      <section class="window pink welcome">
+        <div class="title-bar drag-handle">
+          <span>:: WELCOME ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div class="welcome-inner">
+          <div class="deco">♡ ♡ ♡</div>
+          <h1>CUTENEVERDIES</h1>
+          <p>welcome to my little space on the internet!</p>
+          <div class="line">──────── ♡ ♡ ♡ ♡ ♡ ────────</div>
+        </div>
+      </section>
+
+      <section class="window green about">
+        <div class="title-bar drag-handle">
+          <span>:: ABOUT ME ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div class="about-layout">
+          <div class="about-photo">📷</div>
+
+          <div class="about-text">
+            <p>Hello!</p>
+            <p>This is<br><span>CUTENEVERDIES.</span></p>
+            <p>
+              오래도록 곁에 두고 싶은 것들을,<br>
+              사랑스러운 마음으로<br>
+              디자인하고 기록합니다.
+            </p>
+            <div class="about-deco">♡ ♡ ♡</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="window pink diary">
+        <div class="title-bar drag-handle">
+          <span>:: DIARY ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div class="diary-list">
+          <div class="diary-row">
+            <span>♡</span>
+            <p><b>2026.07.08</b> Tue<br>좋아하는 문장을 수집 중 💻</p>
+            <span></span>
+          </div>
+
+          <div class="diary-row">
+            <span>♡</span>
+            <p><b>2026.07.07</b> Wed<br>새로운 다이어리 샘플 구상 중 🎁</p>
+            <span></span>
+          </div>
+
+          <div class="diary-row">
+            <span>♡</span>
+            <p><b>2026.06.29</b> Thu<br>홈페이지를 만들기 시작했어요! 📖</p>
+            <span></span>
+          </div>
+
+          <div class="more">... more diaries</div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="right-column">
+      <section class="window pink notice">
+        <div class="title-bar drag-handle">
+          <span>:: NOTICE ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div class="content">
+          <p>♡ 홈페이지를 열었어요!</p>
+          <p>♡ 방명록을 남겨주세요 :)</p>
+          <p>♡ 이메일로 연락주세요!</p>
+        </div>
+      </section>
+
+      <section class="window green favorite">
+        <div class="title-bar drag-handle">
+          <span>:: FAVORITE ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div class="content favorite-content">
+          <div class="photo-box">🌷</div>
+          <p>Tulips in the room<br>make everything<br>a little softer.</p>
+          <div class="hearts-small">♡ ♡ ♡</div>
+        </div>
+      </section>
+
+      <section class="window pink link-box">
+        <div class="title-bar drag-handle">
+          <span>:: LINK ::</span>
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div class="content link-list">
+          <p>→ Instagram</p>
+          <p>→ Shop coming soon</p>
+          <p>→ Email</p>
+          <p>→ Archive</p>
+        </div>
+      </section>
+    </aside>
+
+  </div>
+
+  <footer class="footer">
+    <p>© CUTENEVERDIES all rights reserved.</p>
+    <p>♡ ❀ ✧</p>
+
+    <div class="thank-you">
+      <span>♡</span>
+      THANK YOU<br>
+      FOR VISITING!
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
