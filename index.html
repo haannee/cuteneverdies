@@ -79,43 +79,6 @@
         </ul>
       </section>
 
-<section class="window pink guestbook">
-
-  <div class="title-bar drag-handle">
-    <span>:: GUESTBOOK ::</span>
-
-    <span class="window-buttons">
-      <button class="min-btn">−</button>
-      <button class="max-btn">□</button>
-      <button class="close-btn">×</button>
-    </span>
-  </div>
-
-  <div class="content">
-
-    <input
-      id="guest-name"
-      placeholder="Nickname"
-      class="guest-input"
-    >
-
-    <textarea
-      id="guest-message"
-      placeholder="Leave a cute message..."
-      class="guest-textarea"
-    ></textarea>
-
-    <button id="guest-submit" class="guest-btn">
-      ♡ Leave Message ♡
-    </button>
-
-    <div id="guest-list"></div>
-
-  </div>
-
-</section>
-
-
       <section class="window green visitor">
         <div class="title-bar drag-handle">
           <span>:: VISITOR ::</span>
@@ -263,7 +226,48 @@
 
           <div class="more">... more diaries</div>
         </div>
+            </section>
+
+      <!-- GUESTBOOK -->
+
+
+        <div class="title-bar drag-handle">
+          <span>:: GUESTBOOK ::</span>
+
+          <span class="window-buttons">
+            <button class="min-btn">−</button>
+            <button class="max-btn">□</button>
+            <button class="close-btn">×</button>
+          </span>
+        </div>
+
+        <div class="content">
+
+          <input
+            id="guest-name"
+            class="guest-input"
+            placeholder="Nickname"
+          >
+
+          <textarea
+            id="guest-message"
+            class="guest-textarea"
+            placeholder="Leave a cute message..."
+          ></textarea>
+
+          <button
+            id="guest-submit"
+            class="guest-btn"
+          >
+            ♡ Leave Message ♡
+          </button>
+
+          <div id="guest-list"></div>
+
+        </div>
+
       </section>
+
     </main>
 
     <aside class="right-column">

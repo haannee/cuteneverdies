@@ -1111,3 +1111,67 @@ body.night-mode .guest-card {
 body.night-mode .guest-card-message {
   color: #ffd6e8;
 }
+.guest-card {
+  border: 2px dashed var(--pink);
+  padding: 12px;
+  background: #fffdfd;
+}
+
+.guest-card-name {
+  font-weight: bold;
+  color: var(--green);
+  margin-bottom: 6px;
+}
+
+.guest-card-message {
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.guest-card-time {
+  margin-top: 8px;
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.guest-empty {
+  padding: 18px 8px;
+  color: var(--green);
+  text-align: center;
+  font-size: 13px;
+}
+
+body.night-mode .guest-card {
+  background: #24182d;
+}
+
+body.night-mode .guest-card-message {
+  color: #ffd6e8;
+}
+.guestbook {
+  width: 100%;
+  margin-top: 22px;
+}
+
+.guestbook .content {
+  min-height: 520px;
+}
+
+#guest-list {
+  margin-top: 18px;
+}
+.guestbook{
+
+    width:100%;
+
+    margin-top:20px;
+
+}
+
+.guestbook .content{
+
+    min-height:600px;
+
+}

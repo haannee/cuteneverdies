@@ -25,7 +25,7 @@ const db = getFirestore(app);
 
 signInAnonymously(auth)
   .then(function () {
-    alert("익명 로그인 + Firestore 연결 성공!");
+    alert("익명 로그인 성공!");
   })
   .catch(function (error) {
     alert("Firebase 연결 실패");
