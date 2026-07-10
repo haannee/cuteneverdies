@@ -326,6 +326,19 @@ window.addEventListener("DOMContentLoaded", function () {
     .querySelectorAll(".menu-list li[data-window]")
     .forEach(function (item) {
       item.addEventListener("click", function () {
+        if (item.dataset.window === "guestbook") {
+          const guestbook = document.getElementById("guestbook");
+
+          if (guestbook) {
+            guestbook.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          }
+
+          return;
+        }
+
         openWindow(item.dataset.window);
       });
     });
@@ -1140,6 +1153,124 @@ window.addEventListener("DOMContentLoaded", function () {
         roomBedItem.classList.remove(
           "hidden"
         );
+      }
+    );
+  }
+
+  /* ===========================
+     MY ROOM - DRAG BED
+  =========================== */
+
+  const roomStage =
+    document.querySelector(".room-stage");
+
+  if (
+    roomStage &&
+    roomBedItem
+  ) {
+    let isDraggingBed = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    roomBedItem.addEventListener(
+      "pointerdown",
+      function (event) {
+        isDraggingBed = true;
+
+        const bedRect =
+          roomBedItem.getBoundingClientRect();
+
+        offsetX =
+          event.clientX -
+          bedRect.left;
+
+        offsetY =
+          event.clientY -
+          bedRect.top;
+
+        roomBedItem.setPointerCapture(
+          event.pointerId
+        );
+      }
+    );
+
+    roomBedItem.addEventListener(
+      "pointermove",
+      function (event) {
+        if (!isDraggingBed) return;
+
+        const stageRect =
+          roomStage.getBoundingClientRect();
+
+        let newLeft =
+          event.clientX -
+          stageRect.left -
+          offsetX;
+
+        let newTop =
+          event.clientY -
+          stageRect.top -
+          offsetY;
+
+        const maxLeft =
+          roomStage.clientWidth -
+          roomBedItem.offsetWidth;
+
+        const maxTop =
+          roomStage.clientHeight -
+          roomBedItem.offsetHeight;
+
+        newLeft = Math.max(
+          0,
+          Math.min(
+            newLeft,
+            maxLeft
+          )
+        );
+
+        newTop = Math.max(
+          0,
+          Math.min(
+            newTop,
+            maxTop
+          )
+        );
+
+        roomBedItem.style.left =
+          newLeft + "px";
+
+        roomBedItem.style.top =
+          newTop + "px";
+
+        roomBedItem.style.right =
+          "auto";
+
+        roomBedItem.style.bottom =
+          "auto";
+      }
+    );
+
+    roomBedItem.addEventListener(
+      "pointerup",
+      function (event) {
+        isDraggingBed = false;
+
+        if (
+          roomBedItem.hasPointerCapture(
+            event.pointerId
+          )
+        ) {
+          roomBedItem.releasePointerCapture(
+            event.pointerId
+          );
+        }
+      }
+    );
+
+    roomBedItem.addEventListener(
+      "pointercancel",
+      function () {
+        isDraggingBed = false;
       }
     );
   }
