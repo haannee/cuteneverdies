@@ -1,5 +1,15 @@
 window.addEventListener("DOMContentLoaded", function () {
+  "use strict";
+
   let topZ = 1000;
+  let currentSong = 0;
+  let musicStarted = false;
+  let lastTrailTime = 0;
+  let lastSymbolTime = 0;
+
+  /* ===========================
+     DATA
+  =========================== */
 
   const playlist = [
     { title: "어제처럼", file: "music/어제처럼.mp3" },
@@ -43,815 +53,1100 @@ window.addEventListener("DOMContentLoaded", function () {
     { title: "다이어리", file: "music/다이어리.mp3" },
     { title: "Rain", file: "music/Rain.mp3" },
     { title: "사랑해", file: "music/사랑해.mp3" },
-    { title: "헤어지지못하는여자떠나가지못하는남자", file: "music/헤어지지못하는여자떠나가지못하는남자.mp3" }
+    {
+      title: "헤어지지못하는여자떠나가지못하는남자",
+      file: "music/헤어지지못하는여자떠나가지못하는남자.mp3"
+    }
   ];
 
   const effects = [
-  "images/effects/heart.png",
-  "images/effects/ribbon.png",
-  "images/effects/rabbit.png",
-  "images/effects/berry.png",
-  "images/effects/flower.png",
-  "images/effects/book.png",
-  "images/effects/letter.png",
-  "images/effects/CD.png",
-  "images/effects/coffee.png"
-];
+    "images/effects/heart.png",
+    "images/effects/ribbon.png",
+    "images/effects/rabbit.png",
+    "images/effects/berry.png",
+    "images/effects/flower.png",
+    "images/effects/book.png",
+    "images/effects/letter.png",
+    "images/effects/CD.png",
+    "images/effects/coffee.png"
+  ];
 
-const glitters = [
-  "images/effects/glitter1.png",
-  "images/effects/glitter2.png"
-];
+  const glitters = [
+    "images/effects/glitter1.png",
+    "images/effects/glitter2.png"
+  ];
 
-const albumCovers = effects;
+  const albumCovers = effects;
 
-let currentSong = 0;
-let started = false;
+  /* ===========================
+     ELEMENTS
+  =========================== */
 
-const bgm = document.getElementById("bgm");
-const songTitle = document.getElementById("song-title");
-const nowPlayingText =
+  const bgm = document.getElementById("bgm");
+  const songTitle = document.getElementById("song-title");
+  const nowPlayingText =
     document.getElementById("now-playing-text");
-const playBtn = document.getElementById("play-btn");
-const pauseBtn = document.getElementById("pause-btn");
-const prevBtn = document.getElementById("prev-btn");
-const nextBtn = document.getElementById("next-btn");
-const barFill = document.querySelector(".bar-fill");
-const albumCover = document.getElementById("album-cover");
 
+  const playBtn = document.getElementById("play-btn");
+  const pauseBtn = document.getElementById("pause-btn");
+  const prevBtn = document.getElementById("prev-btn");
+  const nextBtn = document.getElementById("next-btn");
 
-/* ===========================
-   WINDOW
-=========================== */
+  const barFill = document.querySelector(".bar-fill");
+  const albumCover = document.getElementById("album-cover");
 
-function bringToFront(win) {
-  document.querySelectorAll(".window").forEach(function (otherWin) {
-    otherWin.classList.remove("active-window");
-  });
+  const darkBtn = document.getElementById("dark-btn");
+  const crtBtn = document.getElementById("crt-btn");
 
-  win.classList.add("active-window");
-  win.style.zIndex = ++topZ;
-}
+  const visitorCounter =
+    document.getElementById("visitor-counter");
 
-document.querySelectorAll(".window").forEach(function (win) {
-  win.addEventListener("mousedown", function () {
-    bringToFront(win);
-  });
-});
+  const digitalClock =
+    document.getElementById("digital-clock");
 
-document.querySelectorAll(".title-bar").forEach(function (bar) {
-  const win = bar.closest(".window");
-  if (!win) return;
+  const addBedBtn =
+    document.getElementById("add-bed-btn");
 
-  bar.addEventListener("mousedown", function (e) {
-    if (e.target.tagName === "BUTTON") return;
+  const roomBedItem =
+    document.getElementById("room-bed-item");
 
-    e.preventDefault();
+  /* ===========================
+     WINDOW HELPERS
+  =========================== */
 
-    const rect = win.getBoundingClientRect();
-
-    win.style.position = "absolute";
-    win.style.left = rect.left + window.scrollX + "px";
-    win.style.top = rect.top + window.scrollY + "px";
-    win.style.width = rect.width + "px";
-
-    bringToFront(win);
-
-    const shiftX = e.clientX - rect.left;
-    const shiftY = e.clientY - rect.top;
-
-    function move(e) {
-      win.style.left =
-        e.clientX + window.scrollX - shiftX + "px";
-
-      win.style.top =
-        e.clientY + window.scrollY - shiftY + "px";
-    }
-
-    function stop() {
-      document.removeEventListener("mousemove", move);
-      document.removeEventListener("mouseup", stop);
-    }
-
-    document.addEventListener("mousemove", move);
-    document.addEventListener("mouseup", stop);
-  });
-});
-
-document.querySelectorAll(".min-btn").forEach(function (btn) {
-  btn.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const win = btn.closest(".window");
+  function bringToFront(win) {
     if (!win) return;
 
-    win.classList.toggle("minimized");
-    bringToFront(win);
-  });
-});
+    document
+      .querySelectorAll(".window")
+      .forEach(function (otherWin) {
+        otherWin.classList.remove("active-window");
+      });
 
-document.querySelectorAll(".max-btn").forEach(function (btn) {
-  btn.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const win = btn.closest(".window");
-    if (!win) return;
-
-    win.classList.remove("minimized");
-    win.classList.toggle("maximized");
-
-    if (win.classList.contains("maximized")) {
-      btn.textContent = "❐";
-    } else {
-      btn.textContent = "□";
-    }
-
-    bringToFront(win);
-  });
-});
-document.querySelectorAll(".close-btn").forEach(function (btn) {
-  btn.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const win = btn.closest(".window");
-    if (!win) return;
-
-    win.classList.add("closed");
-  });
-});
-
-document
-  .querySelectorAll(".menu-list li[data-window]")
-  .forEach(function (item) {
-    item.addEventListener("click", function () {
-      const win =
-        document.querySelector("." + item.dataset.window);
-
-      if (!win) return;
-
-      win.classList.remove("closed");
-win.classList.remove("minimized");
-document
-  .querySelectorAll(".menu-list li[data-window]")
-  .forEach(function (item) {
-    item.addEventListener("click", function () {
-      const win =
-        document.querySelector("." + item.dataset.window);
-
-      if (!win) return;
-
-      win.classList.remove("closed");
-      win.classList.remove("minimized");
-
-      win.classList.remove("opening");
-      void win.offsetWidth;
-      win.classList.add("opening");
-
-      bringToFront(win);
-
-      win.style.position = "fixed";
-
-win.style.left = "50%";
-win.style.top = "50%";
-
-win.style.transform = "translate(-50%, -50%)";
-    });
-  });
-      win.classList.remove("opening");
-
-void win.offsetWidth;
-
-win.classList.add("opening");
-
-setTimeout(function(){
-
-win.classList.remove("opening");
-
-},300);
-
-      bringToFront(win);
-
-  // 처음 열릴 때 화면 중앙으로
-if (!win.dataset.opened) {
-
-  win.style.position = "fixed";
-
-  win.style.left = "50%";
-  win.style.top = "50%";
-
-  win.style.transform = "translate(-50%, -50%)";
-
-  win.dataset.opened = "true";
-
-}
-    });
-  });
-
-
-/* ===========================
-   PLAYLIST
-=========================== */
-
-function renderPlaylist() {
-  const list = document.getElementById("playlist-list");
-  if (!list) return;
-
-  list.innerHTML = "";
-
-  playlist.forEach(function (song, index) {
-    const item = document.createElement("div");
-
-    item.className = "playlist-item";
-    item.textContent = "♪ " + song.title;
-
-    if (index === currentSong) {
-      item.classList.add("active");
-    }
-
-    item.addEventListener("click", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      currentSong = index;
-      started = true;
-
-      loadSong(currentSong);
-      playSong();
-    });
-
-    list.appendChild(item);
-  });
-}
-
-function loadSong(index) {
-  if (!bgm || !playlist[index]) return;
-
-  bgm.src = playlist[index].file;
-
-  if (songTitle) {
-    songTitle.textContent = playlist[index].title;
-    if(nowPlayingText){
-    nowPlayingText.textContent =
-    playlist[index].title;
-}
+    win.classList.add("active-window");
+    win.style.zIndex = String(++topZ);
   }
 
-  if (barFill) {
-    barFill.style.width = "0%";
-  }
+  function playOpeningAnimation(win) {
+    win.classList.remove("opening");
 
-  if (albumCover) {
-    const randomCover =
-      albumCovers[
-        Math.floor(Math.random() * albumCovers.length)
-      ];
+    void win.offsetWidth;
 
-    albumCover.src = randomCover;
-  }
-
-  renderPlaylist();
-}
-
-function playSong() {
-  if (!bgm) return;
-
-  bgm.play()
-    .then(function () {
-      if (albumCover) {
-        albumCover.classList.add("album-spin");
-      }
-    })
-    .catch(function (error) {
-      console.error("BGM 재생 오류:", error);
-
-      alert(
-        "BGM 파일을 재생할 수 없어요. 파일명과 music 폴더를 확인해주세요!"
-      );
-    });
-}
-function startRandomMusic() {
-  if (started) return;
-
-  started = true;
-
-  currentSong =
-    Math.floor(Math.random() * playlist.length);
-
-  loadSong(currentSong);
-  playSong();
-}
-
-function nextSong() {
-  currentSong++;
-
-  if (currentSong >= playlist.length) {
-    currentSong = 0;
-  }
-
-  loadSong(currentSong);
-  playSong();
-}
-
-function prevSong() {
-  currentSong--;
-
-  if (currentSong < 0) {
-    currentSong = playlist.length - 1;
-  }
-
-  loadSong(currentSong);
-  playSong();
-}
-
-if (playBtn) {
-  playBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    started = true;
-    playSong();
-  });
-}
-
-if (pauseBtn) {
-  pauseBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (bgm) {
-      bgm.pause();
-    }
-
-    if (albumCover) {
-      albumCover.classList.remove("album-spin");
-    }
-  });
-}
-
-if (nextBtn) {
-  nextBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    started = true;
-    nextSong();
-  });
-}
-
-if (prevBtn) {
-  prevBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    started = true;
-    prevSong();
-  });
-}
-
-if (bgm) {
-  bgm.addEventListener("timeupdate", function () {
-    if (!bgm.duration || !barFill) return;
-
-    const percent =
-      (bgm.currentTime / bgm.duration) * 100;
-
-    barFill.style.width = percent + "%";
-  });
-
-  bgm.addEventListener("ended", function () {
-    nextSong();
-  });
-}
-
-/* 처음 화면을 클릭하면 랜덤 BGM 시작 */
-document.addEventListener(
-  "mousedown",
-  function () {
-    startRandomMusic();
-  },
-  { once: true }
-);
-
-
-/* ===========================
-   CLICK EXPLOSION
-=========================== */
-
-document.addEventListener("click", function (e) {
-  if (e.target.closest("button")) return;
-
-  for (let i = 0; i < 14; i++) {
-    const img = document.createElement("img");
-
-    img.src =
-      effects[
-        Math.floor(Math.random() * effects.length)
-      ];
-
-    img.className = "effect";
-
-    img.style.left = e.clientX + "px";
-    img.style.top = e.clientY + "px";
-
-    const angle = Math.random() * Math.PI * 2;
-    const distance = 220 + Math.random() * 220;
-
-    const x = Math.cos(angle) * distance;
-    const y = Math.sin(angle) * distance;
-
-    const rotation =
-      (Math.random() - 0.5) * 240;
-
-    const size =
-      65 + Math.random() * 45;
-
-    img.style.setProperty("--x", x + "px");
-    img.style.setProperty("--y", y + "px");
-    img.style.setProperty(
-      "--r",
-      rotation + "deg"
-    );
-
-    img.style.width = size + "px";
-
-    document.body.appendChild(img);
+    win.classList.add("opening");
 
     setTimeout(function () {
-      img.remove();
-    }, 1800);
-  }
-});
-
-
-/* ===========================
-   RIBBON + GLITTER + SYMBOL
-=========================== */
-
-let lastTrailTime = 0;
-let lastSymbolTime = 0;
-
-document.addEventListener("mousemove", function (e) {
-  const now = Date.now();
-
-  /* 리본과 글리터: 더 많이, 오래 남도록 */
-  if (now - lastTrailTime >= 90) {
-    lastTrailTime = now;
-
-    for (let i = 0; i < 2; i++) {
-      const trail =
-        document.createElement("img");
-
-      trail.src =
-        "images/effects/ribbon.png";
-
-      trail.className = "cursor-trail";
-
-      trail.style.left =
-        e.clientX +
-        (Math.random() - 0.5) * 38 +
-        "px";
-
-      trail.style.top =
-        e.clientY +
-        (Math.random() - 0.5) * 38 +
-        "px";
-
-      document.body.appendChild(trail);
-
-      setTimeout(function () {
-        trail.remove();
-      }, 1500);
-    }
-
-    for (let i = 0; i < 3; i++) {
-      const glitter =
-        document.createElement("img");
-
-      glitter.src =
-        glitters[
-          Math.floor(
-            Math.random() * glitters.length
-          )
-        ];
-
-      glitter.className = "glitter";
-
-      glitter.style.left =
-        e.clientX +
-        (Math.random() - 0.5) * 70 +
-        "px";
-
-      glitter.style.top =
-        e.clientY +
-        (Math.random() - 0.5) * 70 +
-        "px";
-
-      document.body.appendChild(glitter);
-
-      setTimeout(function () {
-        glitter.remove();
-      }, 1000);
-    }
+      win.classList.remove("opening");
+    }, 300);
   }
 
-  /* ♡ ✦ ✧ 심볼 */
-  if (now - lastSymbolTime >= 380) {
-    lastSymbolTime = now;
-
-    const symbol =
-      document.createElement("div");
-
-    const chars = ["♡", "✦", "✧", "♡"];
-
-    symbol.className = "cursor-symbol";
-
-    symbol.textContent =
-      chars[
-        Math.floor(Math.random() * chars.length)
-      ];
-
-    symbol.style.left =
-      e.clientX +
-      (Math.random() - 0.5) * 100 +
-      "px";
-
-    symbol.style.top =
-      e.clientY +
-      (Math.random() - 0.5) * 100 +
-      "px";
-
-    symbol.style.fontSize =
-      28 + Math.random() * 18 + "px";
-
-    document.body.appendChild(symbol);
-
-    setTimeout(function () {
-      symbol.remove();
-    }, 1800);
-  }
-});
-
-
-/* ===========================
-   CRT
-=========================== */
-
-const crtBtn =
-  document.getElementById("crt-btn");
-
-if (crtBtn) {
-  crtBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    document.body.classList.toggle("crt-on");
-
-    crtBtn.textContent =
-      document.body.classList.contains("crt-on")
-        ? "CRT ON"
-        : "CRT OFF";
-  });
-}
-
-
-/* ===========================
-   NIGHT MODE
-=========================== */
-
-const darkBtn =
-  document.getElementById("dark-btn");
-
-if (darkBtn) {
-  darkBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    document.body.classList.toggle(
-      "night-mode"
-    );
-
-    darkBtn.textContent =
-      document.body.classList.contains(
-        "night-mode"
-      )
-        ? "NIGHT ON"
-        : "NIGHT OFF";
-  });
-}
-
-
-/* ===========================
-   VISITOR COUNTER
-=========================== */
-
-const visitorCounter =
-  document.getElementById("visitor-counter");
-
-if (visitorCounter) {
-  let visitorNumber = 1234;
-
-  function updateVisitorCounter(animate) {
-    const text =
-      String(visitorNumber).padStart(6, "0");
-
-    visitorCounter.innerHTML = "";
-
-    text.split("").forEach(function (digit) {
-      const span = document.createElement("span");
-      span.textContent = digit;
-
-      visitorCounter.appendChild(span);
-
-      if (animate) {
-        span.animate(
-          [
-            {
-              transform: "translateY(-10px)",
-              opacity: 0.3
-            },
-            {
-              transform: "translateY(0)",
-              opacity: 1
-            }
-          ],
-          {
-            duration: 300,
-            easing: "ease-out"
-          }
-        );
-      }
-    });
+  function centerWindow(win) {
+    win.style.position = "fixed";
+    win.style.left = "50%";
+    win.style.top = "50%";
+    win.style.transform = "translate(-50%, -50%)";
   }
 
-  updateVisitorCounter(false);
+  function openWindow(windowClass) {
+    if (!windowClass) return;
 
-  setInterval(function () {
-    visitorNumber++;
-    updateVisitorCounter(true);
-  }, 8000);
-}
-
-
-/* ===========================
-   FALLING HEARTS
-=========================== */
-
-setInterval(function () {
-  const heart =
-    document.createElement("div");
-
-  const heartShapes = [
-    "♡",
-    "♥",
-    "❤",
-    "❣"
-  ];
-
-  const colors = [
-    "#ff8dbf",
-    "#ffffff"
-  ];
-
-  heart.className = "falling-heart";
-
-  heart.textContent =
-    heartShapes[
-      Math.floor(
-        Math.random() * heartShapes.length
-      )
-    ];
-
-  heart.style.color =
-    colors[
-      Math.floor(
-        Math.random() * colors.length
-      )
-    ];
-
-  heart.style.left =
-    Math.random() *
-      (window.innerWidth - 50) +
-    "px";
-
-  heart.style.top = "-50px";
-
-  heart.style.fontSize =
-    28 + Math.random() * 20 + "px";
-
-  heart.style.animationDuration =
-    7 + Math.random() * 5 + "s";
-
-  document.body.appendChild(heart);
-
-  setTimeout(function () {
-    heart.remove();
-  }, 12500);
-}, 500);
-
-
-/* 첫 곡과 플레이리스트 화면 준비 */
-loadSong(currentSong);
-const digitalClock = document.getElementById("digital-clock");
-
-function updateClock() {
-  if (!digitalClock) return;
-
-  const now = new Date();
-
-  const hours = String(now.getHours()).padStart(2, "0");
-  const minutes = String(now.getMinutes()).padStart(2, "0");
-  const seconds = String(now.getSeconds()).padStart(2, "0");
-
-  digitalClock.textContent =
-    hours + ":" + minutes + ":" + seconds;
-}
-
-updateClock();
-setInterval(updateClock, 1000);
-document.querySelectorAll(".desktop-icon").forEach(function (icon) {
-  icon.addEventListener("dblclick", function () {
-    const windowClass = icon.dataset.window;
-    const win = document.querySelector("." + windowClass);
+    const win =
+      document.querySelector("." + windowClass);
 
     if (!win) return;
 
     win.classList.remove("closed");
     win.classList.remove("minimized");
+    win.classList.remove("maximized");
 
-    win.classList.remove("opening");
-    void win.offsetWidth;
-    win.classList.add("opening");
+    const maxBtn =
+      win.querySelector(".max-btn");
 
-    bringToFront(win);
-
-    win.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-  });
-});
-const bootScreen = document.getElementById("boot-screen");
-const bootMessage = document.getElementById("boot-message");
-const bootFill = document.getElementById("boot-fill");
-const bootPercent = document.getElementById("boot-percent");
-
-const bootMessages = [
-  "Loading Rabbits...",
-  "Loading Strawberries...",
-  "Loading Tulips...",
-  "Loading Memories...",
-  "Loading Pink Dreams...",
-  "Loading Diary...",
-  "Loading Music...",
-  "Loading Cute Things...",
-  "Loading CUTENEVERDIES..."
-];
-
-if (bootScreen && bootMessage && bootFill && bootPercent) {
-  let progress = 0;
-
-  const selectedMessage =
-  bootMessages[Math.floor(Math.random() * bootMessages.length)];
-
-let typingIndex = 0;
-bootMessage.textContent = "";
-
-const typingTimer = setInterval(function () {
-  bootMessage.textContent += selectedMessage.charAt(typingIndex);
-  typingIndex++;
-
-  if (typingIndex >= selectedMessage.length) {
-    clearInterval(typingTimer);
-  }
-}, 180);
-
-  const bootTimer = setInterval(function () {
-    progress += Math.floor(Math.random() * 13) + 5;
-
-    if (progress >= 100) {
-      progress = 100;
+    if (maxBtn) {
+      maxBtn.textContent = "□";
     }
 
-    bootFill.style.width = progress + "%";
-    bootPercent.textContent = progress + "%";
+    centerWindow(win);
+    playOpeningAnimation(win);
+    bringToFront(win);
+  }
 
-    if (progress >= 100) {
-      clearInterval(bootTimer);
+  /* ===========================
+     WINDOW CONTROLS
+  =========================== */
 
-      bootMessage.textContent = "Welcome to CUTENEVERDIES ♡";
+  document
+    .querySelectorAll(".window")
+    .forEach(function (win) {
+      win.addEventListener("mousedown", function () {
+        bringToFront(win);
+      });
+    });
+
+  document
+    .querySelectorAll(".title-bar")
+    .forEach(function (bar) {
+      const win = bar.closest(".window");
+
+      if (!win) return;
+
+      bar.addEventListener("mousedown", function (event) {
+        if (event.target.closest("button")) return;
+
+        if (win.classList.contains("maximized")) {
+          return;
+        }
+
+        event.preventDefault();
+
+        const rect =
+          win.getBoundingClientRect();
+
+        const shiftX =
+          event.clientX - rect.left;
+
+        const shiftY =
+          event.clientY - rect.top;
+
+        win.style.position = "absolute";
+
+        win.style.left =
+          rect.left +
+          window.scrollX +
+          "px";
+
+        win.style.top =
+          rect.top +
+          window.scrollY +
+          "px";
+
+        win.style.width =
+          rect.width + "px";
+
+        win.style.transform = "none";
+
+        bringToFront(win);
+
+        function move(moveEvent) {
+          win.style.left =
+            moveEvent.clientX +
+            window.scrollX -
+            shiftX +
+            "px";
+
+          win.style.top =
+            moveEvent.clientY +
+            window.scrollY -
+            shiftY +
+            "px";
+        }
+
+        function stop() {
+          document.removeEventListener(
+            "mousemove",
+            move
+          );
+
+          document.removeEventListener(
+            "mouseup",
+            stop
+          );
+        }
+
+        document.addEventListener(
+          "mousemove",
+          move
+        );
+
+        document.addEventListener(
+          "mouseup",
+          stop
+        );
+      });
+    });
+
+  document
+    .querySelectorAll(".min-btn")
+    .forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const win =
+          btn.closest(".window");
+
+        if (!win) return;
+
+        win.classList.toggle("minimized");
+
+        bringToFront(win);
+      });
+    });
+
+  document
+    .querySelectorAll(".max-btn")
+    .forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const win =
+          btn.closest(".window");
+
+        if (!win) return;
+
+        win.classList.remove("minimized");
+        win.classList.toggle("maximized");
+
+        btn.textContent =
+          win.classList.contains("maximized")
+            ? "❐"
+            : "□";
+
+        bringToFront(win);
+      });
+    });
+
+  document
+    .querySelectorAll(".close-btn")
+    .forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const win =
+          btn.closest(".window");
+
+        if (!win) return;
+
+        win.classList.add("closed");
+      });
+    });
+
+  document
+    .querySelectorAll(".menu-list li[data-window]")
+    .forEach(function (item) {
+      item.addEventListener("click", function () {
+        openWindow(item.dataset.window);
+      });
+    });
+
+  document
+    .querySelectorAll(".desktop-icon[data-window]")
+    .forEach(function (icon) {
+      icon.addEventListener("dblclick", function () {
+        openWindow(icon.dataset.window);
+      });
+    });
+
+  /* ===========================
+     PLAYLIST
+  =========================== */
+
+  function renderPlaylist() {
+    const list =
+      document.getElementById("playlist-list");
+
+    if (!list) return;
+
+    list.innerHTML = "";
+
+    playlist.forEach(function (song, index) {
+      const item =
+        document.createElement("div");
+
+      item.className = "playlist-item";
+
+      item.textContent =
+        "♪ " + song.title;
+
+      if (index === currentSong) {
+        item.classList.add("active");
+      }
+
+      item.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        currentSong = index;
+        musicStarted = true;
+
+        loadSong(currentSong);
+        playSong();
+      });
+
+      list.appendChild(item);
+    });
+  }
+
+  function loadSong(index) {
+    if (!bgm || !playlist[index]) {
+      return;
+    }
+
+    bgm.src =
+      playlist[index].file;
+
+    if (songTitle) {
+      songTitle.textContent =
+        playlist[index].title;
+    }
+
+    if (nowPlayingText) {
+      nowPlayingText.textContent =
+        playlist[index].title;
+    }
+
+    if (barFill) {
+      barFill.style.width = "0%";
+    }
+
+    if (
+      albumCover &&
+      albumCovers.length > 0
+    ) {
+      const randomCover =
+        albumCovers[
+          Math.floor(
+            Math.random() *
+            albumCovers.length
+          )
+        ];
+
+      albumCover.src = randomCover;
+    }
+
+    renderPlaylist();
+  }
+
+  function playSong() {
+    if (!bgm) return;
+
+    bgm
+      .play()
+      .then(function () {
+        if (albumCover) {
+          albumCover.classList.add(
+            "album-spin"
+          );
+        }
+      })
+      .catch(function (error) {
+        console.error(
+          "BGM 재생 오류:",
+          error
+        );
+      });
+  }
+
+  function pauseSong() {
+    if (!bgm) return;
+
+    bgm.pause();
+
+    if (albumCover) {
+      albumCover.classList.remove(
+        "album-spin"
+      );
+    }
+  }
+
+  function nextSong() {
+    currentSong =
+      (currentSong + 1) %
+      playlist.length;
+
+    loadSong(currentSong);
+    playSong();
+  }
+
+  function prevSong() {
+    currentSong =
+      (
+        currentSong -
+        1 +
+        playlist.length
+      ) % playlist.length;
+
+    loadSong(currentSong);
+    playSong();
+  }
+
+  function startRandomMusic() {
+    if (
+      musicStarted ||
+      playlist.length === 0
+    ) {
+      return;
+    }
+
+    musicStarted = true;
+
+    currentSong =
+      Math.floor(
+        Math.random() *
+        playlist.length
+      );
+
+    loadSong(currentSong);
+    playSong();
+  }
+
+  if (playBtn) {
+    playBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      musicStarted = true;
+
+      playSong();
+    });
+  }
+
+  if (pauseBtn) {
+    pauseBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      pauseSong();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      musicStarted = true;
+
+      nextSong();
+    });
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      musicStarted = true;
+
+      prevSong();
+    });
+  }
+
+  if (bgm) {
+    bgm.addEventListener("timeupdate", function () {
+      if (
+        !bgm.duration ||
+        !barFill
+      ) {
+        return;
+      }
+
+      const percent =
+        (
+          bgm.currentTime /
+          bgm.duration
+        ) * 100;
+
+      barFill.style.width =
+        percent + "%";
+    });
+
+    bgm.addEventListener(
+      "ended",
+      nextSong
+    );
+  }
+
+  document.addEventListener(
+    "mousedown",
+    function () {
+      startRandomMusic();
+    },
+    { once: true }
+  );
+
+  /* ===========================
+     CLICK EXPLOSION
+  =========================== */
+
+  document.addEventListener("click", function (event) {
+    if (event.target.closest("button")) {
+      return;
+    }
+
+    for (let i = 0; i < 14; i++) {
+      const img =
+        document.createElement("img");
+
+      const angle =
+        Math.random() *
+        Math.PI *
+        2;
+
+      const distance =
+        220 +
+        Math.random() *
+        220;
+
+      const x =
+        Math.cos(angle) *
+        distance;
+
+      const y =
+        Math.sin(angle) *
+        distance;
+
+      const rotation =
+        (
+          Math.random() -
+          0.5
+        ) * 240;
+
+      const size =
+        65 +
+        Math.random() *
+        45;
+
+      img.src =
+        effects[
+          Math.floor(
+            Math.random() *
+            effects.length
+          )
+        ];
+
+      img.className = "effect";
+
+      img.style.left =
+        event.clientX + "px";
+
+      img.style.top =
+        event.clientY + "px";
+
+      img.style.width =
+        size + "px";
+
+      img.style.setProperty(
+        "--x",
+        x + "px"
+      );
+
+      img.style.setProperty(
+        "--y",
+        y + "px"
+      );
+
+      img.style.setProperty(
+        "--r",
+        rotation + "deg"
+      );
+
+      document.body.appendChild(img);
 
       setTimeout(function () {
-        bootScreen.style.transition = "opacity 0.6s ease";
-        bootScreen.style.opacity = "0";
+        img.remove();
+      }, 1800);
+    }
+  });
+
+  /* ===========================
+     CURSOR TRAIL
+  =========================== */
+
+  document.addEventListener("mousemove", function (event) {
+    const now = Date.now();
+
+    if (
+      now -
+      lastTrailTime >=
+      90
+    ) {
+      lastTrailTime = now;
+
+      for (let i = 0; i < 2; i++) {
+        const trail =
+          document.createElement("img");
+
+        trail.src =
+          "images/effects/ribbon.png";
+
+        trail.className =
+          "cursor-trail";
+
+        trail.style.left =
+          event.clientX +
+          (
+            Math.random() -
+            0.5
+          ) *
+            38 +
+          "px";
+
+        trail.style.top =
+          event.clientY +
+          (
+            Math.random() -
+            0.5
+          ) *
+            38 +
+          "px";
+
+        document.body.appendChild(trail);
 
         setTimeout(function () {
-          bootScreen.remove();
-        }, 600);
-      }, 500);
+          trail.remove();
+        }, 1500);
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const glitter =
+          document.createElement("img");
+
+        glitter.src =
+          glitters[
+            Math.floor(
+              Math.random() *
+              glitters.length
+            )
+          ];
+
+        glitter.className =
+          "glitter";
+
+        glitter.style.left =
+          event.clientX +
+          (
+            Math.random() -
+            0.5
+          ) *
+            70 +
+          "px";
+
+        glitter.style.top =
+          event.clientY +
+          (
+            Math.random() -
+            0.5
+          ) *
+            70 +
+          "px";
+
+        document.body.appendChild(glitter);
+
+        setTimeout(function () {
+          glitter.remove();
+        }, 1000);
+      }
     }
-  }, 180);
-}
+
+    if (
+      now -
+      lastSymbolTime >=
+      380
+    ) {
+      lastSymbolTime = now;
+
+      const symbol =
+        document.createElement("div");
+
+      const chars = [
+        "♡",
+        "✦",
+        "✧",
+        "♡"
+      ];
+
+      symbol.className =
+        "cursor-symbol";
+
+      symbol.textContent =
+        chars[
+          Math.floor(
+            Math.random() *
+            chars.length
+          )
+        ];
+
+      symbol.style.left =
+        event.clientX +
+        (
+          Math.random() -
+          0.5
+        ) *
+          100 +
+        "px";
+
+      symbol.style.top =
+        event.clientY +
+        (
+          Math.random() -
+          0.5
+        ) *
+          100 +
+        "px";
+
+      symbol.style.fontSize =
+        28 +
+        Math.random() *
+          18 +
+        "px";
+
+      document.body.appendChild(symbol);
+
+      setTimeout(function () {
+        symbol.remove();
+      }, 1800);
+    }
+  });
+
+  /* ===========================
+     CRT MODE
+  =========================== */
+
+  if (crtBtn) {
+    crtBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      document.body.classList.toggle(
+        "crt-on"
+      );
+
+      crtBtn.textContent =
+        document.body.classList.contains(
+          "crt-on"
+        )
+          ? "CRT ON"
+          : "CRT OFF";
+    });
+  }
+
+  /* ===========================
+     NIGHT MODE
+  =========================== */
+
+  if (darkBtn) {
+    darkBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      document.body.classList.toggle(
+        "night-mode"
+      );
+
+      darkBtn.textContent =
+        document.body.classList.contains(
+          "night-mode"
+        )
+          ? "NIGHT ON"
+          : "NIGHT OFF";
+    });
+  }
+
+  /* ===========================
+     VISITOR COUNTER
+  =========================== */
+
+  if (visitorCounter) {
+    let visitorNumber = 1234;
+
+    function updateVisitorCounter(animate) {
+      const text =
+        String(visitorNumber).padStart(
+          6,
+          "0"
+        );
+
+      visitorCounter.innerHTML = "";
+
+      text
+        .split("")
+        .forEach(function (digit) {
+          const span =
+            document.createElement("span");
+
+          span.textContent = digit;
+
+          visitorCounter.appendChild(span);
+
+          if (
+            animate &&
+            typeof span.animate ===
+              "function"
+          ) {
+            span.animate(
+              [
+                {
+                  transform:
+                    "translateY(-10px)",
+                  opacity: 0.3
+                },
+                {
+                  transform:
+                    "translateY(0)",
+                  opacity: 1
+                }
+              ],
+              {
+                duration: 300,
+                easing: "ease-out"
+              }
+            );
+          }
+        });
+    }
+
+    updateVisitorCounter(false);
+
+    setInterval(function () {
+      visitorNumber++;
+
+      updateVisitorCounter(true);
+    }, 8000);
+  }
+
+  /* ===========================
+     FALLING HEARTS
+  =========================== */
+
+  setInterval(function () {
+    const heart =
+      document.createElement("div");
+
+    const heartShapes = [
+      "♡",
+      "♥",
+      "❤",
+      "❣"
+    ];
+
+    const colors = [
+      "#ff8dbf",
+      "#ffffff"
+    ];
+
+    heart.className =
+      "falling-heart";
+
+    heart.textContent =
+      heartShapes[
+        Math.floor(
+          Math.random() *
+          heartShapes.length
+        )
+      ];
+
+    heart.style.color =
+      colors[
+        Math.floor(
+          Math.random() *
+          colors.length
+        )
+      ];
+
+    heart.style.left =
+      Math.random() *
+        Math.max(
+          window.innerWidth - 50,
+          0
+        ) +
+      "px";
+
+    heart.style.top =
+      "-50px";
+
+    heart.style.fontSize =
+      28 +
+      Math.random() *
+        20 +
+      "px";
+
+    heart.style.animationDuration =
+      7 +
+      Math.random() *
+        5 +
+      "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(function () {
+      heart.remove();
+    }, 12500);
+  }, 500);
+
+  /* ===========================
+     DIGITAL CLOCK
+  =========================== */
+
+  function updateClock() {
+    if (!digitalClock) return;
+
+    const now = new Date();
+
+    const hours =
+      String(
+        now.getHours()
+      ).padStart(2, "0");
+
+    const minutes =
+      String(
+        now.getMinutes()
+      ).padStart(2, "0");
+
+    const seconds =
+      String(
+        now.getSeconds()
+      ).padStart(2, "0");
+
+    digitalClock.textContent =
+      hours +
+      ":" +
+      minutes +
+      ":" +
+      seconds;
+  }
+
+  updateClock();
+
+  setInterval(
+    updateClock,
+    1000
+  );
+
+  /* ===========================
+     BOOT SCREEN
+  =========================== */
+
+  const bootScreen =
+    document.getElementById("boot-screen");
+
+  const bootMessage =
+    document.getElementById("boot-message");
+
+  const bootFill =
+    document.getElementById("boot-fill");
+
+  const bootPercent =
+    document.getElementById("boot-percent");
+
+  const bootMessages = [
+    "Loading Rabbits...",
+    "Loading Strawberries...",
+    "Loading Tulips...",
+    "Loading Memories...",
+    "Loading Pink Dreams...",
+    "Loading Diary...",
+    "Loading Music...",
+    "Loading Cute Things...",
+    "Loading CUTENEVERDIES..."
+  ];
+
+  if (
+    bootScreen &&
+    bootMessage &&
+    bootFill &&
+    bootPercent
+  ) {
+    let progress = 0;
+    let typingIndex = 0;
+
+    const selectedMessage =
+      bootMessages[
+        Math.floor(
+          Math.random() *
+          bootMessages.length
+        )
+      ];
+
+    bootMessage.textContent = "";
+
+    const typingTimer =
+      setInterval(function () {
+        bootMessage.textContent +=
+          selectedMessage.charAt(
+            typingIndex
+          );
+
+        typingIndex++;
+
+        if (
+          typingIndex >=
+          selectedMessage.length
+        ) {
+          clearInterval(
+            typingTimer
+          );
+        }
+      }, 180);
+
+    const bootTimer =
+      setInterval(function () {
+        progress +=
+          Math.floor(
+            Math.random() *
+              13
+          ) + 5;
+
+        progress =
+          Math.min(
+            progress,
+            100
+          );
+
+        bootFill.style.width =
+          progress + "%";
+
+        bootPercent.textContent =
+          progress + "%";
+
+        if (progress >= 100) {
+          clearInterval(
+            bootTimer
+          );
+
+          bootMessage.textContent =
+            "Welcome to CUTENEVERDIES ♡";
+
+          setTimeout(function () {
+            bootScreen.style.transition =
+              "opacity 0.6s ease";
+
+            bootScreen.style.opacity =
+              "0";
+
+            setTimeout(function () {
+              bootScreen.remove();
+            }, 600);
+          }, 500);
+        }
+      }, 180);
+  }
+
+  /* ===========================
+     MY ROOM - ADD BED
+  =========================== */
+
+  if (
+    addBedBtn &&
+    roomBedItem
+  ) {
+    addBedBtn.addEventListener(
+      "click",
+      function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        roomBedItem.classList.remove(
+          "hidden"
+        );
+      }
+    );
+  }
+
+  /* ===========================
+     INITIALIZE
+  =========================== */
+
+  loadSong(currentSong);
 });

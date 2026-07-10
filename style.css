@@ -1241,54 +1241,6 @@ padding:16px;
     );
 }
 
-.room-window,
-.room-bed,
-.room-table {
-  position: absolute;
-  z-index: 2;
-  font-size: 54px;
-  user-select: none;
-}
-
-.room-window {
-  top: 44px;
-  left: 48px;
-}
-
-.room-bed {
-  right: 40px;
-  bottom: 50px;
-}
-
-.room-table {
-  left: 48px;
-  bottom: 58px;
-}
-
-.avatar {
-  position: absolute;
-  left: 50%;
-  bottom: 62px;
-
-  width: 150px;
-  height: 210px;
-
-  transform: translateX(-50%);
-  z-index: 5;
-}
-
-.avatar-layer {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-
-  pointer-events: none;
-  image-rendering: pixelated;
-}
-
 .room-panel {
   border: 2px solid var(--green);
   background: #fffefb;
@@ -1326,6 +1278,295 @@ body.night-mode .room-panel {
 body.night-mode .room-stage {
   background: #25182e;
 }
-.room-panel{
+.room-panel {
+  width: 100%;
+}
+/* ===========================
+   MY ROOM — ROOM BASE
+=========================== */
 
-width:100%;
+.room-stage {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  overflow: hidden;
+  border: 2px solid var(--pink);
+  background: #fff4f7;
+}
+
+.room-wall {
+  position: absolute;
+  inset: 0 0 32% 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #ffe1ea 0,
+      #ffe1ea 24px,
+      #fff3f6 24px,
+      #fff3f6 48px
+    );
+}
+
+.room-wall::after {
+  content: "♡";
+  position: absolute;
+  inset: 0;
+  color: rgba(237, 120, 167, 0.16);
+  font-size: 14px;
+  letter-spacing: 28px;
+  line-height: 48px;
+  overflow: hidden;
+}
+
+.room-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 32%;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #e9bd91 0,
+      #e9bd91 42px,
+      #d8a979 42px,
+      #d8a979 44px
+    );
+
+  border-top: 2px solid #c99366;
+}
+
+/* WINDOW */
+
+.room-window {
+  position: absolute;
+  left: 8%;
+  top: 12%;
+  width: 30%;
+  height: 36%;
+  z-index: 2;
+
+  border: 5px solid #d49c72;
+  background: #bde3f5;
+  box-shadow: 3px 3px 0 rgba(80, 50, 40, 0.15);
+}
+
+.window-sky {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse at 28% 34%,
+      white 0 12%,
+      transparent 13%
+    ),
+    radial-gradient(
+      ellipse at 68% 57%,
+      white 0 14%,
+      transparent 15%
+    ),
+    linear-gradient(#9bd8f5, #e7f7ff);
+}
+
+.window-frame-v,
+.window-frame-h {
+  position: absolute;
+  z-index: 2;
+  background: #d49c72;
+}
+
+.window-frame-v {
+  width: 5px;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.window-frame-h {
+  height: 5px;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.window-curtain {
+  position: absolute;
+  top: -8px;
+  width: 28%;
+  height: 112%;
+  z-index: 3;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #fff9ef 0,
+      #fff9ef 9px,
+      #f2dfcf 9px,
+      #f2dfcf 11px
+    );
+  border: 2px solid #e0b9a0;
+}
+
+.curtain-left {
+  left: -20%;
+  transform: rotate(3deg);
+}
+
+.curtain-right {
+  right: -20%;
+  transform: rotate(-3deg);
+}
+
+/* DESK */
+
+.room-desk {
+  position: absolute;
+  left: 7%;
+  bottom: 17%;
+  width: 32%;
+  height: 20%;
+  z-index: 3;
+}
+
+.desk-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 22%;
+  background: #d9a472;
+  border: 3px solid #9f6a42;
+}
+
+.desk-leg {
+  position: absolute;
+  bottom: 0;
+  width: 10%;
+  height: 80%;
+  background: #c58b5c;
+  border: 3px solid #925f3c;
+}
+
+.desk-leg-left {
+  left: 8%;
+}
+
+.desk-leg-right {
+  right: 8%;
+}
+
+/* BED */
+
+.room-bed {
+  position: absolute;
+  right: 5%;
+  bottom: 14%;
+  width: 42%;
+  height: 34%;
+  z-index: 3;
+}
+
+.bed-head {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 13%;
+  height: 100%;
+  background: #d7ae89;
+  border: 3px solid #956847;
+  border-radius: 12px 12px 0 0;
+}
+
+.bed-mattress {
+  position: absolute;
+  left: 0;
+  right: 8%;
+  bottom: 7%;
+  height: 55%;
+  background: #fffaf1;
+  border: 3px solid #a87957;
+  border-radius: 14px 8px 5px 5px;
+}
+
+.bed-blanket {
+  position: absolute;
+  left: 14%;
+  right: 9%;
+  bottom: 9%;
+  height: 47%;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      #f58fb7 0,
+      #f58fb7 16px,
+      #f9b2ca 16px,
+      #f9b2ca 19px
+    );
+  border: 2px solid #dc739d;
+  border-radius: 8px;
+}
+
+.bed-pillow {
+  position: absolute;
+  right: 13%;
+  bottom: 50%;
+  width: 27%;
+  height: 25%;
+  background: #fffaf4;
+  border: 2px solid #e7b8c8;
+  border-radius: 50%;
+}
+
+/* RUG */
+
+.room-rug {
+  position: absolute;
+  left: 38%;
+  bottom: 7%;
+  width: 31%;
+  height: 20%;
+  z-index: 2;
+
+  background: #f7a7c5;
+  border: 3px solid #de7fa4;
+  border-radius: 50%;
+  box-shadow:
+    inset 0 0 0 5px #ffd3e2;
+}
+
+/* TEMPORARY AVATAR */
+
+.room-avatar-placeholder {
+  position: absolute;
+  left: 51%;
+  bottom: 17%;
+  z-index: 5;
+
+  width: 62px;
+  height: 92px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transform: translateX(-50%);
+  border: 2px dashed var(--green);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--pink);
+  font-size: 30px;
+}
+
+/* ADD BED ITEM */
+
+.room-item {
+  position: absolute;
+  right: 35px;
+  bottom: 35px;
+  z-index: 999;
+  font-size: 80px;
+  line-height: 1;
+}
+
+.hidden {
+  display: none;
+}
