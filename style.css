@@ -635,7 +635,7 @@ audio {
   border-bottom:
     1px dashed #f7bfd3;
 
-  color: #679f3b;
+  color: var(--pink);
 
   font-size: 14px;
 
@@ -766,7 +766,7 @@ audio {
 .more {
   padding: 16px 0 0 30px;
 
-  color: var(--green);
+  color: var(--pink);
 
   font-size: 16px;
 }
@@ -1195,7 +1195,7 @@ audio {
   padding: 6px 0;
   border: 0;
   background: transparent;
-  color: var(--green);
+  color: var(--pink);
   font-size: 16px;
   box-shadow: none;
 }
@@ -1840,6 +1840,7 @@ body.night-mode .menu-list li:hover {
 
   .now-playing-bar {
     width: calc(100% - 20px);
+        color: var(--pink);
   }
 
   .guestbook-section {
