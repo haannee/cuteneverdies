@@ -73,11 +73,48 @@
           <li>📖 PUBLICATION</li>
           <li>🎁 OBJECTS</li>
           <li>✏️ JOURNAL</li>
-          <li>💬 GUESTBOOK</li>
+          <li data-window="guestbook">💬 GUESTBOOK</li>
           <li data-window="about">🐰 ABOUT</li>
           <li>🔗 LINKS</li>
         </ul>
       </section>
+
+<section class="window pink guestbook">
+
+  <div class="title-bar drag-handle">
+    <span>:: GUESTBOOK ::</span>
+
+    <span class="window-buttons">
+      <button class="min-btn">−</button>
+      <button class="max-btn">□</button>
+      <button class="close-btn">×</button>
+    </span>
+  </div>
+
+  <div class="content">
+
+    <input
+      id="guest-name"
+      placeholder="Nickname"
+      class="guest-input"
+    >
+
+    <textarea
+      id="guest-message"
+      placeholder="Leave a cute message..."
+      class="guest-textarea"
+    ></textarea>
+
+    <button id="guest-submit" class="guest-btn">
+      ♡ Leave Message ♡
+    </button>
+
+    <div id="guest-list"></div>
+
+  </div>
+
+</section>
+
 
       <section class="window green visitor">
         <div class="title-bar drag-handle">
@@ -304,8 +341,8 @@
     FOR VISITING!
   </div>
 </footer>
-</footer>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
+<script type="module" src="guestbook.js"></script>
 </body>
 </html>

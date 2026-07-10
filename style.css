@@ -1085,3 +1085,29 @@ scale(1);
 animation:windowPop .28s cubic-bezier(.22,1.45,.45,1);
 
 }
+.guest-card-message {
+  color: #333;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.guest-empty {
+  padding: 18px 8px;
+  color: var(--green);
+  text-align: center;
+  font-size: 13px;
+}
+
+.guest-btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+body.night-mode .guest-card {
+  background: #24182d;
+}
+
+body.night-mode .guest-card-message {
+  color: #ffd6e8;
+}
