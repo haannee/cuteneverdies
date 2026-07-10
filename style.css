@@ -1808,10 +1808,8 @@ body.night-mode .menu-list li:hover {
   .top-bar {
     min-width: 1240px;
     padding: 0 28px;
-
     flex-direction: row;
     align-items: center;
-
     font-size: 22px;
   }
 
@@ -1857,12 +1855,13 @@ body.night-mode .menu-list li:hover {
     position: absolute;
     margin: 0;
   }
-}
+
   .now-playing-bar {
     width: calc(100% - 20px);
-        color: var(--pink);
+    color: var(--pink);
   }
 
   .guestbook-section {
     width: 100%;
   }
+}
