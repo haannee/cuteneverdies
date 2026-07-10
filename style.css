@@ -1175,3 +1175,157 @@ body.night-mode .guest-card-message {
     min-height:600px;
 
 }
+/* ===========================
+   MY ROOM
+=========================== */
+
+.my-room {
+  width: 45%;
+  margin-top: 22px;
+}
+
+.my-room-content{
+
+display:flex;
+
+flex-direction:column;
+
+gap:18px;
+
+padding:16px;
+
+}
+
+.room-stage {
+  position: relative;
+  height:360px;
+  width:100%;
+  overflow: hidden;
+
+  border: 2px solid var(--pink);
+  background: #fff5f8;
+}
+
+.room-wall {
+  position: absolute;
+  inset: 0 0 34% 0;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,0.4),
+      rgba(255,255,255,0.4)
+    ),
+    repeating-linear-gradient(
+      90deg,
+      #ffddea 0,
+      #ffddea 28px,
+      #fff4f8 28px,
+      #fff4f8 56px
+    );
+}
+
+.room-floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 34%;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #f2cfaa 0,
+      #f2cfaa 36px,
+      #e7bd91 36px,
+      #e7bd91 38px
+    );
+}
+
+.room-window,
+.room-bed,
+.room-table {
+  position: absolute;
+  z-index: 2;
+  font-size: 54px;
+  user-select: none;
+}
+
+.room-window {
+  top: 44px;
+  left: 48px;
+}
+
+.room-bed {
+  right: 40px;
+  bottom: 50px;
+}
+
+.room-table {
+  left: 48px;
+  bottom: 58px;
+}
+
+.avatar {
+  position: absolute;
+  left: 50%;
+  bottom: 62px;
+
+  width: 150px;
+  height: 210px;
+
+  transform: translateX(-50%);
+  z-index: 5;
+}
+
+.avatar-layer {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+.room-panel {
+  border: 2px solid var(--green);
+  background: #fffefb;
+  padding: 14px;
+}
+
+.room-panel p {
+  color: var(--pink);
+  font-weight: bold;
+  text-align: center;
+}
+
+.room-panel button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 9px;
+
+  border: 1px solid var(--pink);
+  background: #fff;
+  color: var(--green);
+
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.room-panel button:hover {
+  background: #fff0f6;
+  color: var(--pink);
+}
+
+body.night-mode .room-panel {
+  background: #24182d;
+}
+
+body.night-mode .room-stage {
+  background: #25182e;
+}
+.room-panel{
+
+width:100%;

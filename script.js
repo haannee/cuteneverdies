@@ -212,10 +212,12 @@ document
 
       bringToFront(win);
 
-      win.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
+      win.style.position = "fixed";
+
+win.style.left = "50%";
+win.style.top = "50%";
+
+win.style.transform = "translate(-50%, -50%)";
     });
   });
       win.classList.remove("opening");
@@ -232,10 +234,19 @@ win.classList.remove("opening");
 
       bringToFront(win);
 
-      win.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
+  // 처음 열릴 때 화면 중앙으로
+if (!win.dataset.opened) {
+
+  win.style.position = "fixed";
+
+  win.style.left = "50%";
+  win.style.top = "50%";
+
+  win.style.transform = "translate(-50%, -50%)";
+
+  win.dataset.opened = "true";
+
+}
     });
   });
 
