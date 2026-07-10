@@ -821,3 +821,29 @@ body.night-mode .online-dot {
     transform: scale(1);
   }
 }
+.window.maximized {
+  position: fixed !important;
+
+  width: 60vw !important;
+  height: 60vh !important;
+
+  left: 50% !important;
+  top: 50% !important;
+
+  transform: translate(-50%, -50%) !important;
+
+  margin: 0 !important;
+  z-index: 999999 !important;
+
+  overflow: auto;
+}
+
+.window.maximized > *:not(.title-bar) {
+  display: block;
+}
+
+.window.maximized .title-bar {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}

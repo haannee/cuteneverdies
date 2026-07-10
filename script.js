@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", function () {
     { title: "길에서", file: "music/길에서.mp3" },
     { title: "눈물도아까워", file: "music/눈물도아까워.mp3" },
     { title: "잘가요내사랑", file: "music/잘가요내사랑.mp3" },
-    { title: "한번더OK_", file: "music/한번더OK?.mp3" },
+    { title: "한번더OK_", file: "music/한번더OK_.mp3" },
     { title: "비밀번호486", file: "music/비밀번호486.mp3" },
     { title: "Memories", file: "music/Memories.mp3" },
     { title: "사고쳤어요", file: "music/사고쳤어요.mp3" },
@@ -149,6 +149,26 @@ document.querySelectorAll(".min-btn").forEach(function (btn) {
   });
 });
 
+document.querySelectorAll(".max-btn").forEach(function (btn) {
+  btn.addEventListener("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const win = btn.closest(".window");
+    if (!win) return;
+
+    win.classList.remove("minimized");
+    win.classList.toggle("maximized");
+
+    if (win.classList.contains("maximized")) {
+      btn.textContent = "❐";
+    } else {
+      btn.textContent = "□";
+    }
+
+    bringToFront(win);
+  });
+});
 document.querySelectorAll(".close-btn").forEach(function (btn) {
   btn.addEventListener("click", function (e) {
     e.preventDefault();
