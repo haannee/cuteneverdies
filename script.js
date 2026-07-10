@@ -70,6 +70,8 @@ let started = false;
 
 const bgm = document.getElementById("bgm");
 const songTitle = document.getElementById("song-title");
+const nowPlayingText =
+    document.getElementById("now-playing-text");
 const playBtn = document.getElementById("play-btn");
 const pauseBtn = document.getElementById("pause-btn");
 const prevBtn = document.getElementById("prev-btn");
@@ -274,6 +276,10 @@ function loadSong(index) {
 
   if (songTitle) {
     songTitle.textContent = playlist[index].title;
+    if(nowPlayingText){
+    nowPlayingText.textContent =
+    playlist[index].title;
+}
   }
 
   if (barFill) {
@@ -748,4 +754,75 @@ function updateClock() {
 
 updateClock();
 setInterval(updateClock, 1000);
+document.querySelectorAll(".desktop-icon").forEach(function (icon) {
+  icon.addEventListener("dblclick", function () {
+    const windowClass = icon.dataset.window;
+    const win = document.querySelector("." + windowClass);
+
+    if (!win) return;
+
+    win.classList.remove("closed");
+    win.classList.remove("minimized");
+
+    win.classList.remove("opening");
+    void win.offsetWidth;
+    win.classList.add("opening");
+
+    bringToFront(win);
+
+    win.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  });
+});
+const bootScreen = document.getElementById("boot-screen");
+const bootMessage = document.getElementById("boot-message");
+const bootFill = document.getElementById("boot-fill");
+const bootPercent = document.getElementById("boot-percent");
+
+const bootMessages = [
+  "Loading Rabbits...",
+  "Loading Strawberries...",
+  "Loading Tulips...",
+  "Loading Memories...",
+  "Loading Pink Dreams...",
+  "Loading Diary...",
+  "Loading Music...",
+  "Loading Cute Things...",
+  "Loading CUTENEVERDIES..."
+];
+
+if (bootScreen && bootMessage && bootFill && bootPercent) {
+  let progress = 0;
+
+  bootMessage.textContent =
+    bootMessages[Math.floor(Math.random() * bootMessages.length)];
+
+  const bootTimer = setInterval(function () {
+    progress += Math.floor(Math.random() * 13) + 5;
+
+    if (progress >= 100) {
+      progress = 100;
+    }
+
+    bootFill.style.width = progress + "%";
+    bootPercent.textContent = progress + "%";
+
+    if (progress >= 100) {
+      clearInterval(bootTimer);
+
+      bootMessage.textContent = "Welcome to CUTENEVERDIES ♡";
+
+      setTimeout(function () {
+        bootScreen.style.transition = "opacity 0.6s ease";
+        bootScreen.style.opacity = "0";
+
+        setTimeout(function () {
+          bootScreen.remove();
+        }, 600);
+      }, 500);
+    }
+  }, 180);
+}
 });

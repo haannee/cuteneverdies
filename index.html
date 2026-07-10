@@ -7,6 +7,21 @@
 </head>
 
 <body>
+  
+  <div id="boot-screen">
+  <div class="boot-box">
+    <div class="boot-title">CUTENEVERDIES OS</div>
+<div class="boot-message" id="boot-message">Loading memories...</div>
+
+<div class="boot-bar">
+  <div class="boot-fill" id="boot-fill"></div>
+</div>
+
+<div class="boot-percent" id="boot-percent">0%</div>
+<div class="boot-version">Version 1.0</div>
+  </div>
+</div>
+
   <header class="top-bar">
     <div>✧ ·˚ CUTENEVERDIES’s HOME ˚· ✧</div>
    <div class="top-tools">
@@ -18,6 +33,27 @@
 </div>
   </header>
 
+  <div class="desktop-icons">
+  <button class="desktop-icon" data-window="welcome">
+    <span class="desktop-emoji">🏠</span>
+    <span>WELCOME</span>
+  </button>
+
+  <button class="desktop-icon" data-window="diary">
+    <span class="desktop-emoji">📖</span>
+    <span>DIARY</span>
+  </button>
+
+  <button class="desktop-icon" data-window="about">
+    <span class="desktop-emoji">🐰</span>
+    <span>ABOUT</span>
+  </button>
+
+  <button class="desktop-icon" data-window="playlist-window">
+    <span class="desktop-emoji">💿</span>
+    <span>MUSIC</span>
+  </button>
+</div>
   <div class="site">
 
     <aside class="left-column">
@@ -245,20 +281,30 @@
           <p>→ Archive</p>
         </div>
       </section>
+  
     </aside>
 
   </div>
 
-  <footer class="footer">
-    <p>© CUTENEVERDIES all rights reserved.</p>
-    <p>♡ ❀ ✧</p>
+  <div class="now-playing-bar">
+    <marquee behavior="scroll" scrollamount="4">
+      ♫ NOW PLAYING :
+      <span id="now-playing-text">Loading...</span>
+      ♡ CUTENEVERDIES MUSIC PLAYER ♡
+    </marquee>
+  </div>
+  
+ <footer class="footer">
+  <p>© CUTENEVERDIES all rights reserved.</p>
+  <p>♡ ❀ ✧</p>
 
-    <div class="thank-you">
-      <span>♡</span>
-      THANK YOU<br>
-      FOR VISITING!
-    </div>
-  </footer>
+  <div class="thank-you-small">
+    <span>♡</span>
+    THANK YOU<br>
+    FOR VISITING!
+  </div>
+</footer>
+</footer>
 
   <script src="script.js"></script>
 </body>
