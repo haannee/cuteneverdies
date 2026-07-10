@@ -796,8 +796,20 @@ const bootMessages = [
 if (bootScreen && bootMessage && bootFill && bootPercent) {
   let progress = 0;
 
-  bootMessage.textContent =
-    bootMessages[Math.floor(Math.random() * bootMessages.length)];
+  const selectedMessage =
+  bootMessages[Math.floor(Math.random() * bootMessages.length)];
+
+let typingIndex = 0;
+bootMessage.textContent = "";
+
+const typingTimer = setInterval(function () {
+  bootMessage.textContent += selectedMessage.charAt(typingIndex);
+  typingIndex++;
+
+  if (typingIndex >= selectedMessage.length) {
+    clearInterval(typingTimer);
+  }
+}, 70);
 
   const bootTimer = setInterval(function () {
     progress += Math.floor(Math.random() * 13) + 5;
